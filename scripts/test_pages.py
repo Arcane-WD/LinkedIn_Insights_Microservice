@@ -32,21 +32,15 @@ for comp in companies:
         "page_id": comp,
         "name": company.name,
         "linkedin_url": url,
-
-        # Core details
         "about_us": company.about_us,
         "industry": company.industry,
         "company_type": company.company_type,
         "company_size": company.company_size,
         "headcount": company.headcount,
-
-        # Contact / metadata
         "website": company.website,
         "phone": company.phone,
         "headquarters": company.headquarters,
         "founded": company.founded,
-
-        # Lists (store as-is for now)
         "specialties": company.specialties,
     }
 
