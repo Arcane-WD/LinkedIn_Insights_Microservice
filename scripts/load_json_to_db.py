@@ -1,6 +1,6 @@
 import json
-from database import SessionLocal
-from models import CompModel
+from app.database import SessionLocal
+from app.models import CompModel
 
 db = SessionLocal()
 
