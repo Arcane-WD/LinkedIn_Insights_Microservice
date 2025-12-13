@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 from app.models import CompModel
 from app.services.scrapper.company_scraper import company_scrapper
 
@@ -12,7 +13,13 @@ def get_or_create_company(page_id:str, db: Session):
         return comp
     
     data = company_scrapper(page_id)
-
+    if data is None:
+        raise HTTPException(
+            status_code=404,
+            detail="LinkedIn page not found"
+        )
+    
+    
     comp = CompModel(**data)
     db.add(comp)
     db.commit()

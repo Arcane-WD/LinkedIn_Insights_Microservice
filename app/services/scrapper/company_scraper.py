@@ -1,19 +1,36 @@
 from linkedin_scraper import Company, actions
 from selenium import webdriver
-
+from app.services.scrapper.auth import log_in
+from app.config import LINKEDIN_EMAIL, LINKEDIN_PASSWORD
 
 def company_scrapper(company_id:str):
         
     driver = webdriver.Chrome()
+    print("EMAIL:", LINKEDIN_EMAIL)
+    print("PASSWORD:", "SET" if LINKEDIN_PASSWORD else "MISSING")
 
-    email = "vrhr.olsi@gmail.com"
-    pwd = "Harrsha_J@1911"
-
-    #Login
-    actions.login(driver=driver, email=email, password=pwd)
+    log_in(
+        driver=driver,
+        email = LINKEDIN_EMAIL,
+        pwd=LINKEDIN_PASSWORD
+    )
 
     url = "https://www.linkedin.com/company/" + company_id
+    driver.get(url)
+
+    if "Page not found" in driver.page_source:
+        return None
+    
     print(f"Scraping: {url}")
+    def parse_company_size(size_str: str):
+        if not size_str:
+            return None
+
+        number_part = size_str.split()[0]  # "10,001+"
+        number_part = number_part.replace("+", "").replace(",", "")
+        return int(number_part)
+    
+
 
     company = Company(
         linkedin_url=url,

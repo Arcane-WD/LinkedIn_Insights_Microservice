@@ -5,9 +5,10 @@ build/
 dist/
 wheels/
 *.egg-info
-
+linkedin_cookies.pkl
 # Virtual environments
 .venv
+.env
 
 
 # email = "vrhr.olsi@gmail.com"
