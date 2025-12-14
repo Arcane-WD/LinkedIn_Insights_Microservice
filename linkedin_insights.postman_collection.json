@@ -1,0 +1,43 @@
+{
+	"info": {
+		"_postman_id": "9a0da542-3386-404a-a585-2c83735d4640",
+		"name": "Linkedin Inights Microservices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50799348",
+		"_collection_link": "https://harsha2004alpur-8158130.postman.co/workspace/Harsha's-Workspace~437cec7b-fecb-44a5-aa19-f038f444f5ec/collection/50799348-9a0da542-3386-404a-a585-2c83735d4640?action=share&source=collection_link&creator=50799348"
+	},
+	"item": [
+		{
+			"name": "Get company by page_id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "List all companies",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Page request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Search company with filters",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
