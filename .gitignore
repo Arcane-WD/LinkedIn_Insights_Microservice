@@ -9,7 +9,8 @@ linkedin_cookies.pkl
 # Virtual environments
 .venv
 .env
-
+*.pkl
+*.db
 
 # email = "vrhr.olsi@gmail.com"
 # password = "Harrsha_J@1911"
