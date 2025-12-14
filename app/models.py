@@ -13,7 +13,9 @@ class CompModel(Base):
     about_us = Column(Text)
     industry = Column(String)
     company_type = Column(String)
-    company_size = Column(String)
+    company_size_raw = Column(String)
+    company_size_min = Column(Integer, index=True)  
+    company_size_max = Column(Integer)   
     headcount = Column(Integer)
 
     website = Column(String)

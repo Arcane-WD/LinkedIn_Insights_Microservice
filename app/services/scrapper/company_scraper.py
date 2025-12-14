@@ -2,6 +2,8 @@ from linkedin_scraper import Company, actions
 from selenium import webdriver
 from app.services.scrapper.auth import log_in
 from app.config import LINKEDIN_EMAIL, LINKEDIN_PASSWORD
+import re
+from typing import Tuple, Optional
 
 def company_scrapper(company_id:str):
         
@@ -22,13 +24,33 @@ def company_scrapper(company_id:str):
         return None
     
     print(f"Scraping: {url}")
-    def parse_company_size(size_str: str):
-        if not size_str:
-            return None
 
-        number_part = size_str.split()[0]  # "10,001+"
-        number_part = number_part.replace("+", "").replace(",", "")
-        return int(number_part)
+
+    def parse_company_size(size_str: str) -> Tuple[Optional[int], Optional[int]]:
+        if not size_str:
+            return None, None
+
+        s = size_str.lower()
+
+        # "10,001+ employees"
+        if "+" in s:
+            num = int(re.sub(r"[^\d]", "", s))
+            return num, None
+
+        # "2-10 employees"
+        if "-" in s:
+            nums = re.findall(r"\d+", s)
+            if len(nums) == 2:
+                return int(nums[0]), int(nums[1])
+
+        # fallback: single number
+        nums = re.findall(r"\d+", s)
+        if nums:
+            n = int(nums[0])
+            return n, n
+
+        return None, None
+
     
 
 
@@ -39,7 +61,7 @@ def company_scrapper(company_id:str):
         get_employees=False,
         close_on_complete=False
     )
-
+    min_size, max_size = parse_company_size(company.company_size)
     company_data = {
         "page_id": company_id,
         "name": company.name,
@@ -47,7 +69,9 @@ def company_scrapper(company_id:str):
         "about_us": company.about_us,
         "industry": company.industry,
         "company_type": company.company_type,
-        "company_size": company.company_size,
+        "company_size_raw": company.company_size,
+        "company_size_min": min_size,
+        "company_size_max": max_size,
         "headcount": company.headcount,
         "website": company.website,
         "phone": company.phone,

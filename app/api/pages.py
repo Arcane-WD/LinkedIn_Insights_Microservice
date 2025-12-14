@@ -29,7 +29,7 @@ def search_companies(
     min_size: int | None = None,
     max_size: int | None = None,
     limit: int = 10,
-    offset: int = 0
+    offset: int = 0,
 ):
     query = db.query(CompModel)
 
@@ -37,12 +37,16 @@ def search_companies(
         query = query.filter(CompModel.industry.ilike(f"%{industry}%"))
 
     if min_size is not None:
-        query = query.filter(CompModel.company_size >= str(min_size))
+        query = query.filter(CompModel.company_size_min >= min_size)
 
     if max_size is not None:
-        query = query.filter(CompModel.company_size >= str(max_size))
+        query = query.filter(
+            (CompModel.company_size_max <= max_size) |
+            (CompModel.company_size_max.is_(None))
+        )
 
     return query.offset(offset).limit(limit).all()
+
 
 @router.get("/{page_id}")
 def get_comp_by_title(
