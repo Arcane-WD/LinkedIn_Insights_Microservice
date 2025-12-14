@@ -19,7 +19,7 @@ def list_all_companies(
      db: Session = Depends(get_db)
 ):
      return (
-          db.query(CompModel).all()
+          db.query(CompModel).filter(CompModel.is_valid==True).all()
      )
 
 @router.get("/search")

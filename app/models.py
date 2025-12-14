@@ -1,5 +1,5 @@
 from app.database import Base
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, Boolean
 
 class CompModel(Base):
     __tablename__ = "companies"
@@ -23,4 +23,5 @@ class CompModel(Base):
     headquarters = Column(String)
     founded = Column(String)
 
-    specialties = Column(Text) 
+    specialties = Column(Text)
+    is_valid = Column(Boolean, default=True)

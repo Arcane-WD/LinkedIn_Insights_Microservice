@@ -3,6 +3,7 @@ from selenium import webdriver
 from app.services.scrapper.auth import log_in
 from app.config import LINKEDIN_EMAIL, LINKEDIN_PASSWORD
 import re
+import time
 from typing import Tuple, Optional
 
 def company_scrapper(company_id:str):
@@ -18,12 +19,23 @@ def company_scrapper(company_id:str):
     )
 
     url = "https://www.linkedin.com/company/" + company_id
-    driver.get(url)
-
-    if "Page not found" in driver.page_source:
-        return None
-    
+    driver.get(url)    
     print(f"Scraping: {url}")
+
+    def is_invalid_company_page(driver) -> bool:
+        current_url = driver.current_url.lower()
+        if "company/unavailable" in current_url:
+            return True
+
+        page_source = driver.page_source.lower()
+        invalid_markers = [
+            "this linkedin page isn’t available",
+            "this page doesn’t exist",
+            "page not found",
+            "profile not found"
+        ]
+
+        return any(m in page_source for m in invalid_markers)
 
 
     def parse_company_size(size_str: str) -> Tuple[Optional[int], Optional[int]]:
@@ -52,7 +64,12 @@ def company_scrapper(company_id:str):
         return None, None
 
     
+    driver.get(url)
+    time.sleep(2)
 
+    if is_invalid_company_page(driver):
+        driver.quit()
+        return None
 
     company = Company(
         linkedin_url=url,
