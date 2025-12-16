@@ -49,6 +49,78 @@ Page ID → deepsolv
 
 ---
 
+## 🔄 Update: Redis Caching (Added)
+
+A **rudimentary Redis-based caching layer** has been added to reduce repeated database access and avoid unnecessary scraping for frequently requested company pages.
+
+Redis is used strictly as an **in-memory cache**.
+SQLite remains the source of truth.
+
+---
+
+## ▶️ Running Redis Alongside the Application
+
+Redis is **optional but recommended** for improved performance.
+
+### Option 1: Run Redis using Docker (Recommended)
+
+1. Install Docker Desktop
+   [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+
+2. Ensure Docker is running:
+
+```bash
+docker --version
+```
+
+3. Start Redis:
+
+```bash
+docker run -d -p 6379:6379 redis:7
+```
+
+4. Verify Redis is running:
+
+```bash
+docker ps
+```
+
+---
+
+### Option 2: Run Redis without Docker
+
+If Redis is installed locally, ensure it is running on:
+
+```
+Host: localhost
+Port: 6379
+```
+
+---
+
+## ⚙️ Redis Configuration
+
+The application connects to Redis using the following environment variables (optional):
+
+```env
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+If not provided, default values are used.
+
+---
+
+## ▶️ Running the Application (with Redis)
+
+```bash
+python -m run uvicorn app.main:app --reload
+```
+
+Redis will be automatically used for caching company lookups when available.
+
+---
+
 ## 🛠️ Tech Stack
 
 * **Language:** Python 3.12
@@ -58,6 +130,7 @@ Page ID → deepsolv
 * **Scraping:** Selenium + linkedin-scraper
 * **Auth:** Cookie-based LinkedIn login
 * **API Testing:** Postman
+* **Cache:** Redis
 
 ---
 
@@ -195,11 +268,3 @@ Import this file into Postman to test all APIs.
 * Intended for educational and assignment evaluation only
 
 ---
-
-## 📌 Final Notes
-
-This project focuses on correctness, clarity, and robustness over unnecessary complexity, aligning with the assignment requirements.
-
----
-
-If you want, I can do **one last final checklist review** before you submit the Google Form.
