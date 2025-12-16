@@ -5,5 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi>=0.124.4",
+    "linkedin-scraper>=2.11.5",
+    "python-dotenv>=1.2.1",
+    "redis>=7.1.0",
+    "selenium>=4.39.0",
     "sqlalchemy>=2.0.45",
+    "uvicorn>=0.38.0",
 ]

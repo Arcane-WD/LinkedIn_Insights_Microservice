@@ -49,8 +49,8 @@ def search_companies(
 
 
 @router.get("/{page_id}")
-def get_comp_by_title(
+async def get_comp_by_title(
      page_id:str,
      db:Session = Depends(get_db)):
-    return get_or_create_company(page_id=page_id, db=db)
+    return await get_or_create_company(page_id=page_id, db=db)
 

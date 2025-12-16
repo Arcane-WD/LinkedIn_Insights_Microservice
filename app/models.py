@@ -25,3 +25,23 @@ class CompModel(Base):
 
     specialties = Column(Text)
     is_valid = Column(Boolean, default=True)
+
+    def to_dict(self):
+        return {
+            "page_id": self.page_id,
+            "name": self.name,
+            "linkedin_url": self.linkedin_url,
+            "about_us": self.about_us,
+            "industry": self.industry,
+            "company_type": self.company_type,
+            "company_size_raw": self.company_size_raw,
+            "company_size_min": self.company_size_min,
+            "company_size_max": self.company_size_max,
+            "headcount": self.headcount,
+            "website": self.website,
+            "phone": self.phone,
+            "headquarters": self.headquarters,
+            "founded": self.founded,
+            "specialties": self.specialties,
+            "is_valid": self.is_valid,
+        }
