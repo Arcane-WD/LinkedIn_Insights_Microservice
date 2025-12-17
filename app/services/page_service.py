@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from app.models import CompModel
 from app.services.scrapper.company_scraper import company_scrapper
 import json
-from app.cache import redis
+from app.cache.cache import redis
 
 
 

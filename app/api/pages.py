@@ -4,8 +4,13 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.services.page_service import get_or_create_company
 from app.models import CompModel
+import json
+from app.cache.cache import redis
+from app.cache.cache_keys import make_search_cache_key
 
 router = APIRouter(prefix="/companies")
+
+
 
 def get_db():
     db = SessionLocal()
@@ -23,7 +28,7 @@ def list_all_companies(
      )
 
 @router.get("/search")
-def search_companies(
+async def search_companies(
     db: Session = Depends(get_db),
     industry: str | None = None,
     min_size: int | None = None,
@@ -31,7 +36,20 @@ def search_companies(
     limit: int = 10,
     offset: int = 0,
 ):
-    query = db.query(CompModel)
+    SEARCH_CACHE_TTL = 300
+    cache_key = make_search_cache_key(
+        industry=industry,
+        min_size=min_size,
+        max_size=max_size,
+        limit=limit,
+        offset=offset,
+    )
+
+    cached = await redis.get(cache_key)
+    if cached:
+        return json.loads(cached)
+
+    query = db.query(CompModel).filter(CompModel.is_valid==True)
 
     if industry:
         query = query.filter(CompModel.industry.ilike(f"%{industry}%"))
@@ -45,7 +63,14 @@ def search_companies(
             (CompModel.company_size_max.is_(None))
         )
 
-    return query.offset(offset).limit(limit).all()
+    companies = query.offset(offset).limit(limit).all()
+    data = [company.to_dict() for company in companies]
+    await redis.set(
+    cache_key,
+    json.dumps(data),
+    ex=SEARCH_CACHE_TTL
+)
+    return data
 
 
 @router.get("/{page_id}")
