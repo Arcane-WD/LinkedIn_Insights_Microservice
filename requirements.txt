@@ -27,6 +27,7 @@ sortedcontainers==2.4.0
 sqlalchemy==2.0.45
 starlette==0.50.0
 trio==0.32.0
+redis
 trio-websocket==0.12.2
 typing-extensions==4.15.0
 typing-inspection==0.4.2

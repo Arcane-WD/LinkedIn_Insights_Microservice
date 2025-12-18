@@ -1,0 +1,21 @@
+version: "3.9"
+
+environment:
+  DISABLE_SCRAPING: "1"
+services:
+  api:
+    build: .
+    container_name: linkedin_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    
+  redis:
+    image: redis:7
+    container_name: linkedin_redis
+    ports:
+      - "6379:6379"

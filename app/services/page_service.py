@@ -4,7 +4,10 @@ from app.models import CompModel
 from app.services.scrapper.company_scraper import company_scrapper
 import json
 from app.cache.cache import redis
+import os
+from fastapi import HTTPException
 
+SCRAPING_DISABLED = os.getenv("DISABLE_SCRAPING") == "1"
 
 
 async def get_or_create_company(page_id:str, db: Session):
@@ -25,6 +28,13 @@ async def get_or_create_company(page_id:str, db: Session):
         await redis.set(cache_key,json.dumps(data),ex=CACHE_TTL)
 
         return data
+    
+    if SCRAPING_DISABLED:
+        raise HTTPException(
+            status_code=503,
+            detail="Scraping is disabled in this environment"
+        )
+
     
     data = company_scrapper(page_id)
 
